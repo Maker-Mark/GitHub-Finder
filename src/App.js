@@ -14,18 +14,25 @@ state = {
 }
 
 
-  async componentDidMount(){
-    //We want to change loading to true
-    this.setState({loading:true});
-    const res = await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&CLIENT_SERCTER=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    this.setState({users: res.data, loading:false});
-  }
+  // async componentDidMount(){
+  //   //We want to change loading to true
+  //   this.setState({loading:true});
+  //   const res = await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&clientsecret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+  //   this.setState({users: res.data, loading:false});
+  // }
+
+  //Pull state from Seach component
+  searchUsers = async (text) => {
+    const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    this.setState({users: res.data.items, loading:false});
+    console.log(text);
+};
   render() {
     return (
       <div className="App">
         <Navbar title="GitHub Finder" />
         <div className="container">
-          <Search/>
+          <Search searchUsers={this.searchUsers}/>
           <Users loading={this.state.loading}  users={this.state.users} />
 
         </div>
