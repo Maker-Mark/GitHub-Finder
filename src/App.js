@@ -3,6 +3,7 @@ import './App.css'; //Global css, renders on all pages and all components
 import Navbar from './components/layouts/Navbar';
 import Users from './components/users/Users';
 import axios from 'axios'
+import Search from './components/users/Search'
 //Once the app mounts lets get the response from the api using async await
 class App extends React.Component {
 //To bring state into our app lets
@@ -24,8 +25,9 @@ state = {
       <div className="App">
         <Navbar title="GitHub Finder" />
         <div className="container">
+          <Search/>
+          <Users loading={this.state.loading}  users={this.state.users} />
 
-          <Users loading={this.state.loading} users={this.state.users} />
         </div>
       </div>
     );
