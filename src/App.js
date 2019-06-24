@@ -12,6 +12,7 @@ state = {
   users:[],
   loading:false,
   showClear: false,
+  alert:null,
 }
 
 
@@ -34,15 +35,25 @@ state = {
 clearUsers = () =>{
 this.setState({users:[], loading:false})
 }
+
+//Put the alert into the state
+setAlert = (msg, type) => {
+  this.setState({alert:{msg:msg, type:type}});
+
+}
   render() {
-    const { users, searchUsers, loading} = this.state;
+    const { users, loading} = this.state;
   
     return (
       <div className="App">
         <Navbar title="GitHub Finder" />
         <div className="container">
-          <Search searchUsers={this.searchUsers} clearUsers = {this.clearUsers} showClear = {users.length > 0 ? true: false} />
-          <Users loading={loading}  users={users} />
+          <Search searchUsers={this.searchUsers} 
+          clearUsers = {this.clearUsers} 
+          showClear = {users.length > 0 ? true: false}
+          setAlert = {this.setAlert}
+           />
+          <Users loading={loading} users={users} />
 
         </div>
       </div>
