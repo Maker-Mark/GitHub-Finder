@@ -1,7 +1,12 @@
 import React from 'react'
-
+import PropTypes from 'prop-types';
 class Search extends React.Component {
     //  [text,setText] = useState('');
+    static propTypes = {
+        searchUsers: PropTypes.func.isRequired,
+        clearUsers: PropTypes.func.isRequired,
+        showClear: PropTypes.bool.isRequired,
+    };
     
 
      onChange = e => this.setState({[e.target.name]:e.target.value});
@@ -18,6 +23,7 @@ class Search extends React.Component {
                 <input type="text" name='text' placerholder='Search Users..' value={this.text} onChange={this.onChange}/>
                 <input type="submit" value="search" className='btn btn-dark btn-block'/>
                 </form>
+                {this.props.showClear && (<button className="btn btn-light btn-block" onClick={this.props.clearUsers}> Clear</button>)}
             </div>
         )    
      }
