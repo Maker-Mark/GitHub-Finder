@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
+//We use link (need to use brackets to get the non-default export) to keep state!
  const Navbar = ({icon, title}) => {
     return (
       <nav className="navbar bg-primary">
@@ -8,6 +10,14 @@ import PropTypes from 'prop-types';
           <i className={icon} />
           {title}
         </h1>
+        <ul>
+          <li>
+            <Link to="/" > Home</Link>
+          </li>
+          <li>
+            <Link to="/about"> About </Link>
+          </li>
+        </ul>
       </nav>
     );
 };
