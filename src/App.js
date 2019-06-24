@@ -7,12 +7,14 @@ import Search from './components/users/Search';
 import Alert from './components/layouts/Alert';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import About from './components/pages/About'
+import User from './components/users/User'
 //Once the app mounts lets get the response from the api using async await
 class App extends React.Component {
 //To bring state into our app lets
 
 state = {
   users:[],
+  user:{},
   loading:false,
   showClear: false,
   alert:null,
@@ -31,13 +33,20 @@ state = {
     this.setState({loading:true});
     const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
     this.setState({users: res.data.items, loading:false});
-    console.log(text);
 };
+
+//Get a single github user
+getUser = async (username) =>{
+  this.setState({loading:true});
+  const res = await axios.get( `https://api.github.com/search/users?q=${username}?&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+this.setState({user:res.data, loading:false});
+};
+
 
 //Clear users on page
 clearUsers = () =>{
 this.setState({users:[], loading:false})
-}
+};
 
 //Put the alert into the state
 setAlert = (msg, type) => {
@@ -47,7 +56,7 @@ setAlert = (msg, type) => {
     this.setState({alert:null})}, 5000)
 }
   render() {
-    const { users, loading} = this.state;
+    const { user, users, loading} = this.state;
   
     return (
       <Router>
@@ -67,10 +76,12 @@ setAlert = (msg, type) => {
            <Users loading={loading} users={users} />
               </Fragment>
             )}/>
-            
-              <Route exact path='/about' component={About}/>
-             
-    
+            <Route exact path='/about' component={About}/>
+
+            <Route exact path='/user/:login' render = {props =>(
+              <User {...props} getUser={this.getUser} user={user} loading={loading} />
+            )}
+            />
           </Switch>
           
           
