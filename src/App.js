@@ -4,6 +4,7 @@ import Navbar from './components/layouts/Navbar';
 import Users from './components/users/Users';
 import axios from 'axios'
 import Search from './components/users/Search'
+import Alert from './components/layouts/Alert'
 //Once the app mounts lets get the response from the api using async await
 class App extends React.Component {
 //To bring state into our app lets
@@ -39,7 +40,8 @@ this.setState({users:[], loading:false})
 //Put the alert into the state
 setAlert = (msg, type) => {
   this.setState({alert:{msg:msg, type:type}});
-
+  setTimeout(()=>{
+    this.setState({alert:null})}, 5000)
 }
   render() {
     const { users, loading} = this.state;
@@ -48,6 +50,7 @@ setAlert = (msg, type) => {
       <div className="App">
         <Navbar title="GitHub Finder" />
         <div className="container">
+          <Alert alert={this.state.alert} />
           <Search searchUsers={this.searchUsers} 
           clearUsers = {this.clearUsers} 
           showClear = {users.length > 0 ? true: false}
