@@ -26,7 +26,13 @@ export class User extends Component {
             <Fragment>
             <Link to='/' className ='btn btn-light' >Back to Search</Link>
             Hirable: {''}
-            {hireable ? <i className="fas fa-check text-success"/> : <i className = 'fas fa-times-circle text-danger' /> }
+            {/*Using terniary operator to show a span of if this user is marked as hireable */}
+            {hireable ? <span className="fas fa-check text-success"/> : <span className = 'fas fa-times-circle text-danger' /> }
+            <div className="card grid-2">
+                <div className="all-center">
+                    <img src={avatar_url} className="round-img" alt="user-img" style={{width:'150px'}}/>
+                </div>
+            </div>
             </Fragment>
         )
     }
