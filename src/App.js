@@ -1,13 +1,13 @@
 import React, {Fragment} from 'react';
 import './App.css'; //Global css, renders on all pages and all components
 import Navbar from './components/layouts/Navbar';
-import Users from './components/users/Users';
 import axios from 'axios';
 import Search from './components/users/Search';
 import Alert from './components/layouts/Alert';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import About from './components/pages/About'
-import User from './components/users/User'
+import About from './components/pages/About';
+import Users from './components/users/Users';
+import User from './components/users/User';
 //Once the app mounts lets get the response from the api using async await
 class App extends React.Component {
 //To bring state into our app lets
@@ -17,8 +17,8 @@ state = {
   user:{},
   loading:false,
   showClear: false,
-  alert:null,
-}
+  alert:null
+};
 
 
   // async componentDidMount(){
@@ -36,11 +36,12 @@ state = {
 };
 
 //Get a single github user
-getUser = async (username) =>{
+getUser = async (login) =>{
   this.setState({loading:true});
-  const res = await axios.get( `https://api.github.com/search/users?q=${username}?&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-this.setState({user:res.data, loading:false});
+  const result = await axios.get(`https://api.github.com/users/${login}?&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+   this.setState({user:result.data, loading:false});
 };
+
 
 
 //Clear users on page
@@ -56,8 +57,9 @@ setAlert = (msg, type) => {
     this.setState({alert:null})}, 5000)
 }
   render() {
+    // console.log(getUser("Maker-Mark"));
+
     const { user, users, loading} = this.state;
-  
     return (
       <Router>
       <div className="App">
@@ -65,7 +67,6 @@ setAlert = (msg, type) => {
         <div className="container">
           <Alert alert={this.state.alert} />
           <Switch>
-            
             <Route exact path='/' render={props =>(
               <Fragment>
               <Search searchUsers={this.searchUsers} 
@@ -75,21 +76,20 @@ setAlert = (msg, type) => {
            />
            <Users loading={loading} users={users} />
               </Fragment>
-            )}/>
-            <Route exact path='/about' component={About}/>
-
-            <Route exact path='/user/:login' render = {props =>(
-              <User {...props} getUser={this.getUser} user={user} loading={loading} />
             )}
             />
+            <Route exact path='/about' component={About}/>
+            <Route exact path='/user/:login' render={ props=>(
+              <User {...props}  getUser={this.getUser} user={user} loading={loading} />
+            )} />
           </Switch>
-          
-          
-
         </div>
       </div>
       </Router>
+    
     );
+
+
   }
 }
 
