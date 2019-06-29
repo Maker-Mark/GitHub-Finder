@@ -11,16 +11,17 @@ import User from './components/users/User';
 //Once the app mounts lets get the response from the api using async await
 class App extends React.Component {
 //To bring state into our app lets
-
+//This is NOT a test(it is)
 state = {
   users:[],
   user:{},
+  repos:[],
   loading:false,
   showClear: false,
   alert:null
 };
 
-
+  //Use this if you want to see users when the component mounts.
   // async componentDidMount(){
   //   //We want to change loading to true
   //   this.setState({loading:true});
@@ -42,7 +43,12 @@ getUser = async (login) =>{
    this.setState({user:result.data, loading:false});
 };
 
-
+// Get  users' repos
+getUserRepos = async (login) =>{
+  this.setState({loading:true});
+  const result = await axios.get(`https://api.github.com/users/${login}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+   this.setState({repos:result.data, loading:false});
+};
 
 //Clear users on page
 clearUsers = () =>{
@@ -57,9 +63,7 @@ setAlert = (msg, type) => {
     this.setState({alert:null})}, 5000)
 }
   render() {
-    // console.log(getUser("Maker-Mark"));
-
-    const { user, users, loading} = this.state;
+    const { repos, user, users, loading} = this.state;
     return (
       <Router>
       <div className="App">
@@ -80,7 +84,7 @@ setAlert = (msg, type) => {
             />
             <Route exact path='/about' component={About}/>
             <Route exact path='/user/:login' render={ props=>(
-              <User {...props}  getUser={this.getUser} user={user} loading={loading} />
+              <User {...props}  getUser={this.getUser} getUserRepos={this.getUserRepos} user={user} loading={loading} repos={repos} />
             )} />
           </Switch>
         </div>
