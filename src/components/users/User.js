@@ -1,24 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import Spinner from '../layouts/Spinner';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
 
-export class User extends Component {
-  componentDidMount() {
-    this.props.getUser(this.props.match.params.login);
-    this.props.getUserRepos(this.props.match.params.login); //Call the getUserRepos method we got sent in using the this.props of the user...
-  }
-
-  static propTypes = {
-    loading: PropTypes.bool,
-    user: PropTypes.object.isRequired,
-    getUser: PropTypes.func.isRequired,
-    getUserRepos: PropTypes.func.isRequired,
-    repos: PropTypes.array.isRequired
-  };
-
-  render() {
+const User = ({user, loading, getUser,getUserRepos,repos,match})=>  {
+  //Pass in a function
+  useEffect(() =>{
+    getUser(match.params.login);
+    getUserRepos(match.params.login);
+    //eslint-disable-next-line
+  }, []); //Add an empty set of brackets to tell it "when" to reload(a dependancy), in this case, we dont want it to.
     const {
       name,
       avatar_url,
@@ -32,9 +24,9 @@ export class User extends Component {
       followers,
       following,
       public_repos,
-      public_gist
-    } = this.props.user;
-    const { loading, repos } = this.props;
+      public_gists
+    } = user;
+   
     if (loading) {
       return <Spinner />;
     }
@@ -100,12 +92,20 @@ export class User extends Component {
           <div className="badge badge-primary">Followers: {followers}</div>
           <div className="badge badge-success">Following: {following}</div>
           <div className="badge badge-light">Public Repos: {public_repos}</div>
-          <div className="badge badge-dark">Public Gists: {public_gist} </div>
+          <div className="badge badge-dark">Public Gists: {public_gists} </div>
         </div>
         <Repos repos={repos} />
       </Fragment>
     );
   }
-}
+
+
+User.propTypes = {
+  loading: PropTypes.bool,
+  user: PropTypes.object.isRequired,
+  getUser: PropTypes.func.isRequired,
+  getUserRepos: PropTypes.func.isRequired,
+  repos: PropTypes.array.isRequired
+};
 
 export default User;
