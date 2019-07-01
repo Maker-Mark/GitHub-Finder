@@ -13,6 +13,8 @@ import GithubState from './context/github/GithubState';
 import AlertState from './context/alert/AlertState';
 //Once the app mounts lets get the response from the api using async await
 const App = () => {
+  const baseUrl = process.env.PUBLIC_URL; // will be
+
   return (
     <GithubState>
       <AlertState>
