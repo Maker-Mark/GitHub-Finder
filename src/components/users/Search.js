@@ -1,21 +1,23 @@
-import React, { useState, useContext } from "react";
-import GithubContext from "../../context/github/githubContext";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from 'react';
+import GithubContext from '../../context/github/githubContext';
+import AlertContext from '../../context/alert/alertContext';
+import PropTypes from 'prop-types';
 
 //Just destructure the props we know we are getting
 const Search = ({ setAlert }) => {
   //Simply initialize the context.
   const githubContext = useContext(GithubContext);
-  const [text, setText] = useState("");
+  const alertContext = useContext(AlertContext);
+  const [text, setText] = useState('');
   //Change the state of the input
   const onSubmit = e => {
     e.preventDefault();
-    if (text === "") {
-      setAlert("Please enter something", "light");
+    if (text === '') {
+      alertContext.setAlert('Please enter something', 'light');
     } else {
       console.log(githubContext.searchUsers(text)); //Search with the given text
 
-      setText(""); //Then reset the text to be back to blank
+      setText(''); //Then reset the text to be back to blank
     }
   };
   const onChange = e => setText(e.target.value);
@@ -26,16 +28,16 @@ const Search = ({ setAlert }) => {
         <input
           type="text"
           name="text"
-          placerholder="Search Users.."
+          placeholder="Search Users.."
           value={text}
           onChange={onChange}
         />
         <input
           type="submit"
-          value="search"
+          value="Search"
           className="btn btn-dark btn-block"
         />
-      </form>{" "}
+      </form>{' '}
       {githubContext.users.length > 0 && (
         <button
           className="btn btn-light btn-block"

@@ -1,17 +1,26 @@
-import React, { useReducer } from "react";
-import axios from "axios";
-import GithubContext from "./githubContext";
-import GithubReducer from "./githubReducer";
+import React, { useReducer } from 'react';
+import axios from 'axios';
+import GithubContext from './githubContext';
+import GithubReducer from './githubReducer';
 import {
   SEARCH_USERS,
   GET_USER,
   CLEAR_USERS,
   GET_REPOS,
   SET_LOADING
-} from "../types";
+} from '../types';
 //--> Initial state and our ACTIONS, using types
 
 //function that holds our global state...Similar to what we'd have in the App js
+
+let githubClientId, githubClientSecret;
+if (process.env.NODE_ENV !== 'production') {
+  githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+} else {
+  githubClientId = process.env.GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+}
 const GithubState = props => {
   // Our global state with anything that has to do with github
   const initialState = {
@@ -25,13 +34,11 @@ const GithubState = props => {
   const [state, dispatch] = useReducer(GithubReducer, initialState);
 
   //Search Users
-  //Pull state from Seach component
+  //Pull state from Search component
   const searchUsers = async text => {
     setLoading();
     const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/search/users?q=${text}&client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
     console.log(res.data.items);
     dispatch({
@@ -45,9 +52,7 @@ const GithubState = props => {
   const getUser = async login => {
     setLoading();
     const res = await axios.get(
-      `https://api.github.com/users/${login}?&client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${login}?&client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
     dispatch({
       type: GET_USER,
@@ -70,9 +75,15 @@ const GithubState = props => {
   };
 
   //Clear users on page
-  const clearUsers = () => dispatch({ type: CLEAR_USERS });
+  const clearUsers = () =>
+    dispatch({
+      type: CLEAR_USERS
+    });
   //Set Loading
-  const setLoading = () => dispatch({ type: SET_LOADING });
+  const setLoading = () =>
+    dispatch({
+      type: SET_LOADING
+    });
 
   //Value is somthing that we want to make available to our entire map
   //We add the things we want to make available given the state using context.
@@ -89,8 +100,8 @@ const GithubState = props => {
         getUserRepos
       }}
     >
-      {props.children}
-      {/* We wrap our entire app with this provider */}
+      {' '}
+      {props.children} {/* We wrap our entire app with this provider */}{' '}
     </GithubContext.Provider>
   );
 };

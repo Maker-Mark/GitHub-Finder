@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
-import UserItem from "./UserItem";
-import Spinner from "../layouts/Spinner";
-import PropTypes from "prop-types";
-import GithubContext from "../../context/github/githubContext";
+import React, { useContext } from 'react';
+import UserItem from './UserItem';
+import Spinner from '../layouts/Spinner';
+import PropTypes from 'prop-types';
+import GithubContext from '../../context/github/githubContext';
 
 const Users = () => {
-  //Now we will be getting props from the user componet being rendered in the contianer.
+  //Now we will be getting props from the user component being rendered in the container.
   //So now we user this.props.users instead of this.state
   const githubContext = useContext(GithubContext); //Initalize the context
   const { loading, users } = githubContext;
@@ -29,9 +29,9 @@ Users.propTypes = {
 };
 
 const userStyle = {
-  display: "grid",
-  gridTemplateColumns: "repeat(3,1fr)",
-  gridGap: "1rem"
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3,1fr)',
+  gridGap: '1rem'
 };
 
 export default Users;
