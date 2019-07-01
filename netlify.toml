@@ -1,5 +1,4 @@
 [build]
 publish="build"
-baseurl = "https://github.com/Maker-Mark/GitHub-Finder/
 canonifyurls = true
 relativeURLs = true
