@@ -1,4 +1,5 @@
 import React, {Fragment, useState} from 'react';
+import GithubState from './context/github/GithubState';
 import './App.css'; //Global css, renders on all pages and all components
 import Navbar from './components/layouts/Navbar';
 import axios from 'axios';
@@ -8,6 +9,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import About from './components/pages/About';
 import Users from './components/users/Users';
 import User from './components/users/User';
+
 //Once the app mounts lets get the response from the api using async await
 const App = () => {
 //To bring state into our app lets
@@ -28,13 +30,7 @@ const [showClear,setShowClear] = useState(false);
   //   this.setState({users: res.data, loading:false});
   // }
 
-  //Pull state from Seach component
-  const searchUsers = async (text) => {
-    setLoading(true);
-    const res = await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    setUsers(res.data.items);
-    setLoading(false);
-};
+ 
 
 //Get a single github user
 const getUser = async (login) =>{
@@ -65,6 +61,7 @@ const showAlert = (msg, type) => {
   setTimeout(()=>{setAlert(null)}, 5000)
 }
     return (
+      <GithubState> 
       <Router>
       <div className="App">
         <Navbar title="GitHub Finder" />
@@ -73,7 +70,7 @@ const showAlert = (msg, type) => {
           <Switch>
             <Route exact path='/' render={props =>(
               <Fragment>
-              <Search searchUsers={searchUsers} 
+              <Search 
               clearUsers = {clearUsers} 
               showClear = {users.length > 0 ? true: false}
               setAlert = {showAlert}
@@ -90,6 +87,7 @@ const showAlert = (msg, type) => {
         </div>
       </div>
       </Router>
+      </GithubState>
     );
   }
 
