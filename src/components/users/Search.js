@@ -1,21 +1,21 @@
-import React, { useState, useContext } from 'react';
-import GithubContext from '../../context/github/githubContext';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from "react";
+import GithubContext from "../../context/github/githubContext";
+import PropTypes from "prop-types";
 
 //Just destructure the props we know we are getting
-const Search = ({showClear, clearUsers, setAlert }) => {
+const Search = ({ setAlert }) => {
   //Simply initialize the context.
   const githubContext = useContext(GithubContext);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   //Change the state of the input
   const onSubmit = e => {
     e.preventDefault();
-    if (text === '') {
-      setAlert('Please enter something', 'light');
+    if (text === "") {
+      setAlert("Please enter something", "light");
     } else {
       console.log(githubContext.searchUsers(text)); //Search with the given text
 
-      setText(''); //Then reset the text to be back to blank
+      setText(""); //Then reset the text to be back to blank
     }
   };
   const onChange = e => setText(e.target.value);
@@ -35,9 +35,12 @@ const Search = ({showClear, clearUsers, setAlert }) => {
           value="search"
           className="btn btn-dark btn-block"
         />
-      </form>{' '}
-      {showClear && (
-        <button className="btn btn-light btn-block" onClick={clearUsers}>
+      </form>{" "}
+      {githubContext.users.length > 0 && (
+        <button
+          className="btn btn-light btn-block"
+          onClick={githubContext.clearUsers}
+        >
           Clear
         </button>
       )}
