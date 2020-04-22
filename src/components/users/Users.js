@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import UserItem from './UserItem';
-import Spinner from '../layouts/Spinner'
-import PropTypes from 'prop-types'
+import Spinner from '../layouts/Spinner';
+import PropTypes from 'prop-types';
+import GithubContext from '../../context/github/githubContext';
 
-
-const Users = ({users, loading})=> {
-  //Now we will be getting props from the user componet being rendered in the contianer.
+const Users = () => {
+  //Now we will be getting props from the user component being rendered in the container.
   //So now we user this.props.users instead of this.state
-
-    if(loading){
-      return <Spinner/>
-    }else{
-
-    
+  const githubContext = useContext(GithubContext); //Initalize the context
+  const { loading, users } = githubContext;
+  if (loading) {
+    return <Spinner />;
+  } else {
     return (
       <div style={userStyle}>
         {users.map(user => (
@@ -21,13 +20,13 @@ const Users = ({users, loading})=> {
       </div>
     );
   }
-}
+};
 
 //Let's make sure we get an array
 Users.propTypes = {
   users: PropTypes.array.isRequired,
-  loading:PropTypes.bool.isRequired
-}
+  loading: PropTypes.bool.isRequired
+};
 
 const userStyle = {
   display: 'grid',
